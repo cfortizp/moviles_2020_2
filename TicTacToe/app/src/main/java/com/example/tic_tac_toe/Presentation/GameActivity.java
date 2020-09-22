@@ -1,10 +1,17 @@
 package com.example.tic_tac_toe.Presentation;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +62,83 @@ public class GameActivity extends AppCompatActivity {
         start_game();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.dificulty:
+                showDialog(1);
+                return true;
+            case R.id.exit:
+                showDialog(0);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        switch(id) {
+            case 1:
+
+                builder.setTitle("Dificulty");
+
+                final CharSequence[] levels = {"Easy","Hard","Expert"};
+
+                // TODO: Set selected, an integer (0 to n-1), for the Difficulty dialog.
+                // selected is the radio button that should be selected.
+
+                builder.setSingleChoiceItems(levels, Constanst.dificulty,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                dialog.dismiss();   // Close dialog
+
+                                // TODO: Set the diff level of mGame based on which item was selected.
+
+                                Constanst.dificulty = item;
+                                // Display the selected difficulty level
+                                Toast.makeText(getApplicationContext(), levels[item],
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                dialog = builder.create();
+
+                break;
+            case 0:
+                // Create the quit confirmation dialog
+
+                builder.setMessage("Are you sure you want to quit?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                                System.exit(0);
+                            }
+                        })
+                        .setNegativeButton("No", null);
+                dialog = builder.create();
+
+                break;
+
+        }
+
+        return dialog;
+    }
+
+
+
     private void start_game(){
         int turn = new Random().nextInt(2);
         for(int i = 0; i< board.length;i++){
