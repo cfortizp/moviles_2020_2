@@ -3,7 +3,9 @@ package com.example.tic_tac_toe.Presentation;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +32,10 @@ public class GameActivity extends AppCompatActivity {
     private TextView score_android;
     private TextView information;
     private Button play;
+    private MediaPlayer sound_move;
+    private MediaPlayer sound_win;
+    private MediaPlayer sound_lose;
+    private MediaPlayer sound_tie;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +90,26 @@ public class GameActivity extends AppCompatActivity {
         }
         return false;
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sound_move = MediaPlayer.create(getApplicationContext(), R.raw.move);
+        sound_win = MediaPlayer.create(getApplicationContext(), R.raw.lose);
+        sound_lose = MediaPlayer.create(getApplicationContext(), R.raw.win);
+        sound_tie = MediaPlayer.create(getApplicationContext(), R.raw.tie);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        sound_move.release();
+        sound_win.release();
+        sound_lose.release();
+        sound_tie.release();
+    }
+
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -168,8 +194,10 @@ public class GameActivity extends AppCompatActivity {
                 ExpertMove();
                 break;
         }
+
         int winner = checkForWinner();
         if(winner ==0){
+            sound_move.start();
             information.setText("Your turn");
         }else{
             String message = "";
@@ -177,14 +205,17 @@ public class GameActivity extends AppCompatActivity {
                 case 1:
                     message = "It's a tie!";
                     Constanst.score_Ties++;
+                    sound_tie.start();
                     break;
                 case 2:
                     message = "You won!";
                     Constanst.score_Human++;
+                    sound_win.start();
                     break;
                 case 3:
                     message = "Android won!";
                     Constanst.score_Android++;
+                    sound_lose.start();
                     break;
             }
             information.setText(message);
@@ -340,24 +371,36 @@ public class GameActivity extends AppCompatActivity {
                 board[location].getButton().setEnabled(false);
                 board[location].getButton().setImageResource(R.drawable.man);
                 board[location].setSelect(1);
+
                 int winner = checkForWinner();
                 if(winner ==0){
+                    sound_move.start();
                     information.setText("Android\'s turn");
-                    android_move();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            android_move();
+                        }
+                    }, 1000);
+
+
                 }else{
                     String message = "";
                     switch (winner){
                         case 1:
                             message = "It's a tie!";
                             Constanst.score_Ties++;
+                            sound_tie.start();
                             break;
                         case 2:
                             message = "You won!";
                             Constanst.score_Human++;
+                            sound_win.start();
                             break;
                         case 3:
                             message = "Android won!";
                             Constanst.score_Android++;
+                            sound_lose.start();
                             break;
                     }
                     information.setText(message);
