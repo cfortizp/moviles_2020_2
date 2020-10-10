@@ -24,6 +24,8 @@
         <activity android:name=".Presentation.DificultyActivity"
             android:label="Dificulty"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Presentation.Settings" android:label="Settings"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

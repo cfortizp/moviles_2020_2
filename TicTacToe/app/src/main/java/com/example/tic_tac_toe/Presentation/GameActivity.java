@@ -3,9 +3,12 @@ package com.example.tic_tac_toe.Presentation;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,10 +39,27 @@ public class GameActivity extends AppCompatActivity {
     private MediaPlayer sound_win;
     private MediaPlayer sound_lose;
     private MediaPlayer sound_tie;
+    private boolean mSoundOn = true;
+    private SharedPreferences mPrefs;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mSoundOn = mPrefs.getBoolean("sound", true);
+        String difficultyLevel = mPrefs.getString("difficulty_level", "Expert");
+
+        if (difficultyLevel.equals("Easy")) {
+            Constanst.dificulty = 0;
+        } else if (difficultyLevel.equals("Hard")) {
+            Constanst.dificulty = 1;
+        } else {
+            Constanst.dificulty = 2;
+        }
+
+
+
         board = new BoardSpace[9];
         board[0] = new BoardSpace((ImageButton)findViewById(R.id.one),-1);
         board[1] = new BoardSpace((ImageButton)findViewById(R.id.two),-1);
@@ -72,7 +92,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
         return true;
@@ -83,6 +102,9 @@ public class GameActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.dificulty:
                 showDialog(1);
+                return true;
+            case R.id.settings:
+                startActivityForResult(new Intent(this, Settings.class), 0);
                 return true;
             case R.id.exit:
                 showDialog(0);
@@ -162,9 +184,6 @@ public class GameActivity extends AppCompatActivity {
 
         return dialog;
     }
-
-
-
     private void start_game(){
         int turn = new Random().nextInt(2);
         for(int i = 0; i< board.length;i++){
@@ -197,7 +216,9 @@ public class GameActivity extends AppCompatActivity {
 
         int winner = checkForWinner();
         if(winner ==0){
-            sound_move.start();
+            if(mSoundOn) {
+                sound_move.start();
+            }
             information.setText("Your turn");
         }else{
             String message = "";
@@ -205,17 +226,26 @@ public class GameActivity extends AppCompatActivity {
                 case 1:
                     message = "It's a tie!";
                     Constanst.score_Ties++;
-                    sound_tie.start();
+                    if(mSoundOn) {
+                        sound_tie.start();
+                    }
                     break;
                 case 2:
                     message = "You won!";
                     Constanst.score_Human++;
-                    sound_win.start();
+                    if(mSoundOn){
+                        sound_win.start();
+                    }
+
+                    message = mPrefs.getString("victory_message", message);
+
                     break;
                 case 3:
                     message = "Android won!";
                     Constanst.score_Android++;
-                    sound_lose.start();
+                    if(mSoundOn) {
+                        sound_lose.start();
+                    }
                     break;
             }
             information.setText(message);
@@ -374,7 +404,9 @@ public class GameActivity extends AppCompatActivity {
 
                 int winner = checkForWinner();
                 if(winner ==0){
-                    sound_move.start();
+                    if(mSoundOn) {
+                        sound_move.start();
+                    }
                     information.setText("Android\'s turn");
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -390,17 +422,24 @@ public class GameActivity extends AppCompatActivity {
                         case 1:
                             message = "It's a tie!";
                             Constanst.score_Ties++;
-                            sound_tie.start();
+                            if(mSoundOn) {
+                                sound_tie.start();
+                            }
                             break;
                         case 2:
                             message = "You won!";
                             Constanst.score_Human++;
-                            sound_win.start();
+                            if(mSoundOn) {
+                                sound_win.start();
+                            }
+                            message = mPrefs.getString("victory_message", message);
                             break;
                         case 3:
                             message = "Android won!";
                             Constanst.score_Android++;
-                            sound_lose.start();
+                            if(mSoundOn) {
+                                sound_lose.start();
+                            }
                             break;
                     }
                     information.setText(message);
@@ -410,6 +449,26 @@ public class GameActivity extends AppCompatActivity {
                     }
                     play.setEnabled(true);
                 }
+            }
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_CANCELED) {
+            // Apply potentially new settings
+
+            mSoundOn = mPrefs.getBoolean("sound", true);
+
+            String difficultyLevel = mPrefs.getString("difficulty_level", "Expert");
+
+            if (difficultyLevel.equals("Easy")) {
+                Constanst.dificulty = 0;
+            } else if (difficultyLevel.equals("Hard")) {
+                Constanst.dificulty = 1;
+            } else {
+                Constanst.dificulty = 2;
             }
         }
     }

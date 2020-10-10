@@ -5,6 +5,9 @@
         android:title="Dificulty"/>
 
     <item
+        android:id="@+id/settings"
+        android:title="Settings"/>
+    <item
         android:id="@+id/exit"
         android:title="Quit"/>
 
