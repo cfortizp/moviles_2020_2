@@ -1,4 +1,4 @@
-package com.example.tic_tac_toe;
+package com.moviles.tic_tac_toe;
 
 import org.junit.Test;
 

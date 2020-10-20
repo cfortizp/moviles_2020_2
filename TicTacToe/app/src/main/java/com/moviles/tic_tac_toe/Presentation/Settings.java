@@ -1,4 +1,4 @@
-package com.example.tic_tac_toe.Presentation;
+package com.moviles.tic_tac_toe.Presentation;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import com.example.tic_tac_toe.R;
+import com.moviles.tic_tac_toe.R;
 
 public class Settings extends PreferenceActivity {
 

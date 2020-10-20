@@ -1,4 +1,4 @@
-package com.example.tic_tac_toe.Presentation;
+package com.moviles.tic_tac_toe.Presentation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tic_tac_toe.R;
-import com.example.tic_tac_toe.Util.Constanst;
+import com.moviles.tic_tac_toe.R;
+import com.moviles.tic_tac_toe.Util.Constanst;
 
 public class DificultyActivity extends AppCompatActivity {
     private Button easy;

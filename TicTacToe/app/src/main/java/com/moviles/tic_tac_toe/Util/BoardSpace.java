@@ -1,6 +1,5 @@
-package com.example.tic_tac_toe.Util;
+package com.moviles.tic_tac_toe.Util;
 
-import android.widget.Button;
 import android.widget.ImageButton;
 
 public class BoardSpace {

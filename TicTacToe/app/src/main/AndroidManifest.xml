@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tic_tac_toe">
+    package="com.moviles.tic_tac_toe">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Presentation.MainActivity"
+            android:name="com.moviles.tic_tac_toe.Presentation.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,12 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Presentation.GameActivity"
+        <activity android:name="com.moviles.tic_tac_toe.Presentation.GameActivity"
             android:label="@string/app_name"></activity>
-        <activity android:name=".Presentation.DificultyActivity"
+        <activity android:name="com.moviles.tic_tac_toe.Presentation.MultiplayerActivity"
+            android:label="@string/app_name"></activity>
+        <activity android:name="com.moviles.tic_tac_toe.Presentation.ListGameActivity"
+            android:label="@string/app_name"></activity>
+        <activity android:name="com.moviles.tic_tac_toe.Presentation.DificultyActivity"
             android:label="Dificulty"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Presentation.Settings" android:label="Settings"
+        <activity android:name="com.moviles.tic_tac_toe.Presentation.Settings" android:label="Settings"
             android:theme="@style/AppTheme"></activity>
     </application>
 

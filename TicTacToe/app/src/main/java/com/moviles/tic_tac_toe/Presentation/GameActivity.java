@@ -1,4 +1,4 @@
-package com.example.tic_tac_toe.Presentation;
+package com.moviles.tic_tac_toe.Presentation;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,9 +22,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tic_tac_toe.R;
-import com.example.tic_tac_toe.Util.BoardSpace;
-import com.example.tic_tac_toe.Util.Constanst;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.moviles.tic_tac_toe.R;
+import com.moviles.tic_tac_toe.Util.BoardSpace;
+import com.moviles.tic_tac_toe.Util.Constanst;
+import com.moviles.tic_tac_toe.Util.Game;
 
 import java.util.Random;
 
@@ -35,17 +42,20 @@ public class GameActivity extends AppCompatActivity {
     private TextView score_android;
     private TextView information;
     private Button play;
-    private MediaPlayer sound_move;
-    private MediaPlayer sound_win;
-    private MediaPlayer sound_lose;
-    private MediaPlayer sound_tie;
+    MediaPlayer sound_move;
+    MediaPlayer sound_win;
+    MediaPlayer sound_lose;
+    MediaPlayer sound_tie;
     private boolean mSoundOn = true;
     private SharedPreferences mPrefs;
+    private int turno;
+    private DatabaseReference mDatabase;
+    private DatabaseReference gameReference;
+    private Game game;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mSoundOn = mPrefs.getBoolean("sound", true);
         String difficultyLevel = mPrefs.getString("difficulty_level", "Expert");
@@ -84,6 +94,10 @@ public class GameActivity extends AppCompatActivity {
 
             }
         });
+        sound_move = MediaPlayer.create(getApplicationContext(), R.raw.move);
+        sound_win = MediaPlayer.create(getApplicationContext(), R.raw.lose);
+        sound_lose = MediaPlayer.create(getApplicationContext(), R.raw.win);
+        sound_tie = MediaPlayer.create(getApplicationContext(), R.raw.tie);
         update_score();
         start_game();
 
@@ -100,9 +114,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.dificulty:
-                showDialog(1);
-                return true;
             case R.id.settings:
                 startActivityForResult(new Intent(this, Settings.class), 0);
                 return true;
@@ -125,7 +136,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         sound_move.release();
         sound_win.release();
         sound_lose.release();
@@ -185,14 +195,14 @@ public class GameActivity extends AppCompatActivity {
         return dialog;
     }
     private void start_game(){
-        int turn = new Random().nextInt(2);
+        turno = new Random().nextInt(2);
         for(int i = 0; i< board.length;i++){
             board[i].getButton().setEnabled(true);
             board[i].setSelect(-1);
             board[i].getButton().setImageResource(0);
             board[i].getButton().setOnClickListener(new GameActivity.ButtonClickListener(i));
         }
-        if(turn==0){
+        if(turno==0){
             information.setText("Android go first!");
             android_move();
         }else{
@@ -255,6 +265,7 @@ public class GameActivity extends AppCompatActivity {
             }
             play.setEnabled(true);
         }
+        turno = 1;
 
     }
     private void RandomMove(){
@@ -397,7 +408,8 @@ public class GameActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            if(board[location].getSelect()==-1) {
+            if(board[location].getSelect()==-1 && turno ==1) {
+                turno = 0;
                 board[location].getButton().setEnabled(false);
                 board[location].getButton().setImageResource(R.drawable.man);
                 board[location].setSelect(1);
