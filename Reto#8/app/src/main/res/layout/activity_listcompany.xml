@@ -9,7 +9,6 @@
     <Button
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/search"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:background="@color/colorPrimary"
@@ -17,19 +16,26 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="125dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:drawableLeft="@drawable/search"
         android:text="Search"></Button>
 
     <Button
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/add"
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:background="@color/coloradd"
         android:textColor="#fff"
         android:layout_marginRight="30dp"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="120dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:drawableLeft="@drawable/add"
         android:text="Add"></Button>
 
     <ScrollView

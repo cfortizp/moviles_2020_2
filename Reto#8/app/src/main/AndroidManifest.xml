@@ -18,6 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Presentation.CompanyActivity"
+            android:label="@string/app_name"
+          >
+        </activity>
+        <activity
+            android:name=".Presentation.ListCompanyActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".Presentation.UpsertCompanyActivity"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>

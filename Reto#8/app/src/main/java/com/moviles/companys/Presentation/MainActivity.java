@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         Constanst.db.execSQL("CREATE TABLE IF NOT EXISTS CompanyClasification(id int PRIMARY KEY,name VARCHAR);");
         Constanst.db.execSQL("CREATE TABLE IF NOT EXISTS Companies(id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR, url VARCHAR,telephone VARCHAR,email VARCHAR, products VARCHAR, clasification INTEGER);");
         Constanst.db.execSQL("INSERT OR REPLACE INTO CompanyClasification(id , name) VALUES (1,'Consulting'),(2,'Custom Development'),(3,'Software Factory');");
-        Constanst.db.execSQL("CREATE TABLE IF NOT EXISTS CompanyClasification(id int,name VARCHAR);");
         start = findViewById(R.id.start);
         start.setOnClickListener(new View.OnClickListener() {
             @Override

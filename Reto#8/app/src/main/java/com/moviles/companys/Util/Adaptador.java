@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.moviles.companys.R;
@@ -28,13 +29,24 @@ public class Adaptador extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-
         final View vista = inflater.inflate(R.layout.item_company, null);
-
         TextView game_name = (TextView) vista.findViewById(R.id.name_company);
         TextView classification = (TextView) vista.findViewById(R.id.clasification);
+        ImageView image = (ImageView) vista.findViewById(R.id.image);
         game_name.setText(datos.get(i).get(1));
-        classification.setText("Classification: "+datos.get(i).get(4));
+        classification.setText("Classification: "+datos.get(i).get(3));
+        int type = Integer.parseInt(datos.get(i).get(2));
+        switch (type){
+            case 1:
+                image.setImageResource(R.drawable.consulting);
+                break;
+            case 2:
+                image.setImageResource(R.drawable.development);
+                break;
+            case 3:
+                image.setImageResource(R.drawable.factory);
+                break;
+        }
         return vista;
     }
 
